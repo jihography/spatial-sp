@@ -1,0 +1,298 @@
+---
+title: |
+  | [학생자율연구: 심화]{style="font-size:0.5em"}
+  | [공간데이터분석에서 심슨의 역설 발생 메커니즘 규명]{style="font-size:1em"} 
+subtitle: "국지적 모형에의 함의점 도출"
+author: "곽지호"
+date: "2026-04-01"
+format: 
+  revealjs:
+    footer: "Simpson's Paradox in Spatial Data Analysis"
+    transition: fade
+    transition-speed: fast
+    margin: 0.05
+    center: false
+    # smaller: false
+    scrollable: true
+    css: presentation.css
+    code-link: true
+    code-line-numbers: false
+    code-copy: true
+    code-overflow: scroll
+    slide-number: true
+    width: 960 * 1.5
+    height: 700 * 1.5
+    lightbox: false
+    # min-scale: 1
+    # max-scale: 1
+    pointer:
+      pointerSize: 20
+      color: red
+    menu: true
+    embed-resources: false
+    theme: [default, custom_hq_pretendard_step.scss] # 슬라이드 본문 폰트 크기 조정
+code-link: true
+execute: 
+  warning: false
+  error: false
+  freeze: auto  
+dpi: 600
+editor: visual
+# suppress-bibliography: true
+editor_options: 
+  chunk_output_type: console
+---
+
+## 목차
+
+1. 연구 배경 및 필요성
+2. 교란변수의 도입
+3. 연구 질문
+4. 연구 방법
+5. 국지적 모형에의 함의
+6. 실증 분석
+7. 논의 사항
+
+---
+
+## 연구 배경 {.smaller}
+
+**공간 데이터 분석에서의 근원적 문제들**
+
+- 국지적 분석(local analysis)은 공간적 이질성을 포착하는 SDA의 핵심 방법론 (Lee, 2001)
+- 대표적 국지적 모형: **GWR**, **MGWR**, **SGWR**, **M-SGWR**
+
+**문제의식**
+
+- 동일 데이터에 전역적 모형(OLS)과 국지적 모형(GWR 등)을 적합할 때 추정 계수의 **부호가 역전**되는 현상 → **공간적 심슨의 역설** (FS2022; SF2023)
+- 진짜 공간적 이질성인지, 허위 상관관계(spurious correlation)인지? (꼭 달라져야 하는가?)
+- 다른건 다르게, 같은건 같게 잡아내야 한다. local modelling이 할 수 있는가?
+- 발생 메커니즘 혹은 체계적 양상은 **아직 규명되지 않음**
+
+---
+
+## 심슨의 역설이란?
+
+::: {.columns}
+::: {.column width="50%"}
+**비공간적 심슨의 역설**
+
+- 집계 데이터에서의 변수 관계가 세분화 시 **역전·소멸**
+- 대표 사례: UC Berkeley 대학원 입학 성별 편향 (Bickel et al., 1975)
+- 발생 조건: 교란변수 Z가 X, Y 모두에 영향 (Pearl, 2000; DAG)
+
+:::
+::: {.column width="50%"}
+**공간적 심슨의 역설**
+
+- OLS(전역) vs. GWR/MGWR(국지) 간 회귀계수 **부호 역전**
+- Fotheringham & Sachdeva (2022) 정의
+- MAUP의 극단적 사례로 해석
+- 시뮬레이션 + 실증 확인 (King County, Los Angeles 주택가격)
+:::
+:::
+
+---
+
+## 기존 연구의 한계
+
+::: {.incremental}
+1. **메커니즘 미규명**
+   - Sachdeva & Fotheringham (2023): 현상을 보여줬으나
+     *어떤 조건에서* 역전이 발생하는지 형식화하지 않음
+   - 결론: "전역·국지 모형은 서로 다른 질문에 답한다" — 충분하지 않음
+
+2. **모형 선택 문제**
+   - GWR, MGWR, SGWR 등 다양한 국지적 모형 중 어떤 것이
+     실제 관계를 더 잘 추정하는지 불명확
+   - 잘못된 모형 선택 시 **거짓 상관관계(spurious correlation)** 도출 위험
+:::
+
+---
+
+## 본 연구의 접근: 교란변수의 도입
+
+공간적 군집
+
+$$Y_i = \beta_{true} \times X_i + \gamma \times Z_i + \epsilon_i$$
+
+::: {.columns}
+::: {.column width="50%"}
+**비공간적 맥락**
+
+- Z가 X, Y 모두에 영향
+- Z 미통제 시 거짓 상관 발생
+
+*사례: 태양 노출(Z) → 운동(X), 피부암(Y)*
+:::
+::: {.column width="50%"}
+**공간적 확장 (본 연구)**
+
+- Z의 **공간적 자기상관 정도** ($\rho_s$)
+- Z와 X의 **상관 강도** ($\alpha$)
+- 관측 공변량 W와 Z의 상관 ($\delta$)
+:::
+:::
+
+---
+
+## 연구 흐름도
+
+```{mermaid}
+flowchart TD
+    A["<b>문제 제기</b><br/>공간적 심슨의 역설<br/>발생 메커니즘 미규명"] --> B
+
+    B["<b>이론적 틀 구성</b><br/>교란변수 Z 도입<br/>Pearl(2000) DAG 프레임워크"] --> C
+
+    C["<b>DGP 설계</b><br/>Y = β·X + γ·Z + ε<br/>Z의 공간적 군집(ρₛ), X-Z 상관(α), W-Z 상관(δ)"] --> D
+
+    D["<b>시뮬레이션</b>"] --> D1 & D2 & D3
+
+    D1["RQ1: 발생 조건<br/>ρₛ, α → 역설 발생?"]
+    D2["RQ2: GWR의 역할<br/>지리적 근접 이웃<br/>→ Z 암묵적 통제?"]
+    D3["RQ3: SGWR의 역할<br/>속성 유사 이웃<br/>→ Z 간접 통제?"]
+
+    D1 & D2 & D3 --> E
+
+    E["<b>평가 지표 비교</b><br/>Bias / Bias Reduction / 부호 역전 비율"] --> F
+
+    F["<b>실증 분석</b><br/>한국 시군구별 출산력 데이터<br/>시뮬레이션 결과와 비교"] --> G
+
+    G["<b>결론 및 함의</b><br/>국지적 모형 해석 가이드라인<br/>이웃 정의 방식과 추정 결과의 관계"]
+```
+
+---
+
+## 연구문제
+
+| # | 구분 | 연구문제 | 가설 |
+|---|------|---------|------|
+| RQ1 | 발생 조건 | Z의 공간적 자기상관(ρₛ)과 X-Z 상관(α)이 역설 발생에 미치는 영향 | ρₛ↑, α↑ → 역설 강해짐 |
+| RQ2 | GWR 역할 | Z가 공간적으로 군집 시, GWR 추정치는? | OLS보다 β_true에 근접 |
+| RQ3 | SGWR 역할 | Z 군집 약해도 W가 Z의 대리변수일 때 SGWR은? | GWR보다도 β_true에 근접 |
+| RQ4 | 실증 | 출산력 데이터의 역전이 RQ1–3 조건에 해당? | — |
+
+---
+
+## 연구방법: 시뮬레이션 설계 {.smaller}
+
+**4단계 DGP**
+
+::: {.panel-tabset}
+
+### 1단계: True DGP
+$$Y_i = \beta_{true} \times X_i + \gamma \times Z_i + \epsilon_i$$
+
+- $\beta_{true} = 0$으로 설정 시 X–Y 간 실제 관계 없음
+- Z는 관측되지 않는 교란변수
+
+### 2단계: Z의 공간 분포
+Z 생성 방법 (택일):
+
+- **가우시안 랜덤 필드**: 대역폭 $h$가 클수록 군집↑
+- **모런 고유벡터**: 고유값 순위($\rho_s$)가 클수록 군집↑
+
+### 3단계: X–Z 상관
+$$X_i = \alpha \times Z_i + \eta_i$$
+
+- $\alpha$ 클수록 거짓 상관 강함
+- $\alpha = 0$이면 역설 발생 안 함
+
+### 4단계: W–Z 상관
+$$W_i = \delta \times Z_i + \nu_i$$
+
+- $\delta$ 클수록 W가 Z의 좋은 대리변수
+- SGWR의 속성 유사성이 Z를 간접 통제 가능
+
+:::
+
+---
+
+## 실험 조건 및 예상 결과
+
+| $\rho_s$ | $\alpha$ | $\delta$ | 예상 결과 |
+|---------|---------|---------|----------|
+| 높음 | 높음 | — | **GWR이 역설 완화** |
+| 낮음 | 높음 | 낮음 | GWR, SGWR 모두 완화 실패 |
+| 낮음 | 높음 | 높음 | **SGWR만 역설 완화** |
+| — | 낮음 | — | 역설 발생 안 함 |
+
+---
+
+## 평가 지표
+
+$$\text{Bias} = \frac{1}{n}\sum_i |\hat{\beta}_i - \beta_{true}|$$
+
+$$\text{Bias Reduction} = \frac{|\widehat{\beta_{OLS} - \beta_{true}}| - |\widehat{\beta_{local} - \beta_{true}}|}{|\widehat{\beta_{OLS} - \beta_{true}}|}$$
+
+부호 역전 비율: $\hat{\beta}$의 부호가 $\widehat{\beta_{OLS}}$와 반대인 관측치 비율
+
+---
+
+## 국지적 모형과의 연관성 {.smaller}
+
+::: {.columns}
+::: {.column width="50%"}
+**GWR** (Brunsdon et al., 1996)
+
+- 지리적 근접성 기반 가중치
+- Z가 **공간적으로 군집** → 이웃 내 Z의 분산↓
+  → Z 암묵적 통제 가능 (RQ2)
+
+**MGWR** (Fotheringham et al., 2017)
+
+- 변수별 상이한 대역폭 추정
+- 각 관계의 작동 스케일 개별 모델링
+:::
+::: {.column width="50%"}
+**SGWR** (Lessani & Li, 2024)
+
+- 지리적 근접성 **+** 속성 유사성 가중치
+- 영향 비 파라미터 $\alpha$ ($\alpha=1$이면 GWR)
+- Z 군집 약해도, W(대리변수)를 통한 간접 통제 가능 (RQ3)
+
+**M-SGWR** (Lessani et al., 2026)
+
+- SGWR의 변수별 대역폭 확장 모델
+:::
+:::
+
+---
+
+## 실증 분석 계획
+
+**데이터**: 한국 시군구별 출산력 데이터 *(추후 변경 가능)*
+
+**목적**
+
+- 시뮬레이션 조건에 해당하는 사례 확인 (RQ4)
+- 실제 데이터에서 OLS vs. GWR vs. SGWR 추정 결과 역전 사례 검토
+- 시뮬레이션 결과의 현실적 타당성 검증
+
+**분석 도구**: R (`GWmodel`, `spgwr` 등), GitHub으로 버전 관리
+
+---
+
+## 논의 사항
+
+::: {.incremental}
+- Z의 공간적 분포 생성 방법: **가우시안 랜덤 필드** vs. **모런 고유벡터** 중 어느 것이 더 적절한가?
+- $\beta_{true} = 0$ 외에 추가로 고려할 DGP 조건이 있는가?
+- 실증 분석 데이터셋: 출산력 데이터가 적합한가, 혹은 더 적절한 사례가 있는가?
+- GWR/SGWR 외 MGWR, M-SGWR까지 포함할 것인가?
+:::
+
+---
+
+## 참고문헌 {.smaller}
+
+- Bickel et al. (1975). Sex bias in graduate admissions. *Science*, 187, 398–404.
+- Brunsdon et al. (1996). Geographically weighted regression. *Geographical Analysis*, 28, 281–298.
+- Fotheringham & Sachdeva (2022). Scale and local modeling. *Journal of Geographical Systems*, 24, 475–499.
+- Fotheringham et al. (2017). Multiscale GWR (MGWR). *Annals AAG*, 107, 1247–1265.
+- Lee, S-I. (2001). A spatial statistical approach to migration studies. *KARG*, 7(3), 107–120.
+- Lessani & Li (2024). SGWR. *IJGIS*, 38(7), 1232–1255.
+- Lessani et al. (2026). M-SGWR. *arXiv*.
+- Pearl, J. (2000). *Causality*. Cambridge University Press.
+- Sachdeva & Fotheringham (2023). A geographical perspective on Simpson's paradox. *JOSIS*, 26, 1–25.
+- Simpson, E. H. (1951). The interpretation of interaction in contingency tables. *JRSS-B*, 13, 238–241.

@@ -1,0 +1,30 @@
+/*-- scss:defaults --*/
+
+// fonts
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+$font-family-sans-serif: 'Pretendard', sans-serif;
+
+$presentation-font-size-root: 55px;
+
+// headings
+
+$presentation-h1-font-size: 1.9em;
+$presentation-h2-font-size: 1.3em;
+
+.reveal p {
+  font-size: 0.95em !important; // 1차 수준
+}
+
+.reveal ul li {
+  font-size: 0.9em !important; // 2차 수준
+}
+
+.reveal ul ul li {
+  font-size: 0.85em !important; // 3차 수준
+}
+
+.reveal ul ul ul li {
+  font-size: 0.8em !important; // 4차 수준
+}

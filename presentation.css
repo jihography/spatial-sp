@@ -1,0 +1,30 @@
+.reveal,
+.reveal p,
+.reveal li,
+.reveal td,
+.reveal th {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.reveal .title {
+  font-size: 1em;
+}
+
+.reveal .subtitle {
+  font-size: 1em;
+}
+
+.reveal .slide-number {
+  font-size: 0.6em;
+}
+
+.small {
+  font-size: 0.75em;
+}
+
+.center-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

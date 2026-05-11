@@ -11,7 +11,7 @@
 
   <meta name="author" content="곽지호">
   <meta name="dcterms.date" content="2026-04-01">
-  <title>quarto-input4e65e8201a839cab</title>
+  <title>quarto-inpute4d47f242a7c05bd</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -130,7 +130,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title"><div class="line-block"><span style="font-size:0.5em">학생자율연구: 심화</span><br>
+  <h1 class="title"><div class="line-block"><span style="font-size:0.6em">학생자율연구: 심화</span><br>
 <span style="font-size:1em">공간데이터분석에서 심슨의 역설 발생 메커니즘 규명</span></div></h1>
   <p class="subtitle">국지적 모형에의 함의점 도출</p>
 
@@ -161,14 +161,27 @@
 <ul>
 <li>OLS(전역)와 GWR/MGWR(국지) 간 회귀계수 <strong>부호 역전</strong> = 공간적 심슨의 역설, <em>spatial variant of Simpson’s Paradox</em> (FS2022; SF2023)</li>
 </ul>
-
-<img data-src="fs2022.jpeg" style="width:80.0%" class="r-stretch"></section>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="fs2022.jpeg"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="fs2022_2.jpeg"></p>
+</div>
+</div>
+</div>
+</section>
 <section id="연구-개요-1" class="slide level2">
 <h2>연구 개요</h2>
 <p><strong>현상 및 기존 연구의 한계</strong></p>
 <ul>
 <li class="fragment">기존 결론: “전역·국지 모형은 서로 다른 질문(프로세스)에 대한 답”</li>
-<li class="fragment">예시: 운동(X)과 피부암 발생률(Y), 태양 노출 빈도(Z)의 관계</li>
+<li class="fragment">Motivating한 예시: 운동(X)과 피부암 발생률(Y), 태양 노출 빈도(Z)의 관계
+<ul>
+<li class="fragment">전역적 모형이 어떤 process를 모델링 하는지 명확하지 않음</li>
+<li class="fragment">spurious correlation (허위 상관관계)</li>
+</ul></li>
 <li class="fragment">‘<strong>어떤 조건에서</strong> 국지 모형의 의미가 더 크다고 할 수 있는가?’ → 전역적/국지적 모형 결과 달라지는 양상 파악 필요</li>
 </ul>
 </section>
@@ -176,12 +189,12 @@
 <h2>연구 개요</h2>
 <p><strong>본 연구의 접근</strong></p>
 <ul>
-<li>관측되지 않은 <strong>교란변수 Z</strong>를 DGP에 명시적으로 도입하여 시뮬레이션 진행 (X와의 관련성 / Z의 공간적 군집 정도)</li>
+<li>관측되지 않은 <strong>교란변수 Z</strong>를 DGP에 명시적으로 도입하여 시뮬레이션 진행 (X와의 관련성 / Z의 공간적 군집 정도) → SP 발생하는지 확인</li>
 <li>GWR, SGWR이 각각 어떤 조건에서 Z를 <strong>간접적으로 통제</strong>하는지 파악 → 국지적 모형 해석 및 선택에 대한 함의 도출</li>
 <li>실증 분석 사례로부터 확인</li>
 </ul>
 </section>
-<section id="연구문제" class="slide level2">
+<section id="연구문제" class="slide level2 smaller">
 <h2>연구문제</h2>
 <table class="caption-top">
 <colgroup>
@@ -263,9 +276,15 @@
 </div>
 </div>
 </section>
-<section id="실험-조건-및-예상-결과" class="slide level2">
+<section id="실험-조건-및-예상-결과" class="slide level2 scrollable">
 <h2>실험 조건 및 예상 결과</h2>
 <table class="caption-top">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 27%">
+</colgroup>
 <thead>
 <tr class="header">
 <th><span class="math inline">\(\rho_s\)</span></th>
@@ -279,7 +298,7 @@
 <td>높음</td>
 <td>높음</td>
 <td>—</td>
-<td><strong>GWR이 역설 완화</strong></td>
+<td><strong>GWR이 역설 완화</strong><sup>1</sup></td>
 </tr>
 <tr class="even">
 <td>낮음</td>
@@ -301,14 +320,14 @@
 </tr>
 </tbody>
 </table>
-</section>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>역설 완화: 추정된 <span class="math inline">\(\hat{\beta}\)</span>가 true <span class="math inline">\(\beta\)</span>에 더 가까워짐을 의미</p></li></ol></aside></section>
 <section id="평가-지표" class="slide level2">
 <h2>평가 지표</h2>
 <p><span class="math display">\[\text{Bias} = \frac{1}{n}\sum_i |\hat{\beta}_i - \beta_{true}|\]</span></p>
 <p><span class="math display">\[\text{Bias Reduction} = \frac{|\widehat{\beta_{OLS} - \beta_{true}}| - |\widehat{\beta_{local} - \beta_{true}}|}{|\widehat{\beta_{OLS} - \beta_{true}}|}\]</span></p>
 <p>부호 역전 비율: <span class="math inline">\(\hat{\beta}\)</span>의 부호가 <span class="math inline">\(\widehat{\beta_{OLS}}\)</span>와 반대인 관측치 비율</p>
 </section>
-<section id="toy-example" class="slide level2">
+<section id="toy-example" class="slide level2 smaller">
 <h2>Toy Example</h2>
 <p>관측치 6개, 집단 2개 (맑은 도시 A, 흐린 도시 B)</p>
 <table class="caption-top">
@@ -503,9 +522,10 @@
 <section id="논의-사항" class="slide level2">
 <h2>논의 사항</h2>
 <ul>
-<li class="fragment">타당성: 국지적 모형(GWR, SGWR)의 해석가능성? ‘인과’ 프레임워크와의 구분</li>
+<li class="fragment">기여: 국지적 모형(GWR, SGWR)의 장점/해석 시 유의점?</li>
+<li class="fragment">‘인과’ 프레임워크와의 구분 필요</li>
 <li class="fragment">실제 분석 상황: DGP를 모르는 상태</li>
-<li class="fragment">적절한 실증 분석 데이터셋 찾기</li>
+<li class="fragment">적절한 실증 분석 데이터셋 찾기 (예: 교란변수 Z가 공간적으로 군집되지 않은 경우)</li>
 <li class="fragment">분석 모형의 문제: (M-)SGWR 패키지</li>
 </ul>
 </section>
@@ -525,6 +545,7 @@
 </ul>
 
 </section>
+
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
